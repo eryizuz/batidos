@@ -1,0 +1,167 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fff;
+  background: url(./background.png);
+  background-attachment: fixed;
+
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.contenedor {
+  padding: 30px;
+}
+
+.contenedor h1 {
+  text-align: center;
+  color: #fff;
+}
+
+.contenedor-flex {
+  display: flex;
+  margin-top: 50px;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.link {
+  color: #fff;
+  display: inline-block;
+  width: 300px;
+  background: #7e6ab6;
+  
+}
+
+.puto {
+  color: #fff;
+  margin-top: 100px;
+  text-align: center;
+}
+
+.borde {
+  margin: 50px auto;
+  width: 40%;
+}
+
+.prueba {
+  background: #FFF;
+}
+
+.contenedor-derecha {
+  position: absolute;
+  bottom: 48.5%;
+  left: 70%;
+}
+
+.input-text {
+  font-family: "Lithos Po";
+  padding: 25px;
+  background: linear-gradient(to right, rgb(61,95,145), rgb(72, 62, 130, .7));
+  color: #fff;
+  font-size: 20px;
+}
+
+.input-text:focus {
+  background: linear-gradient(to right, rgb(61,95,145), rgb(72, 62, 130, .7));
+  color: #fff;
+}
+
+.input-select { /* 181,44,100  198,101,67*/
+  font-family: "Lithos Po";
+  padding: 25px;
+/*   background: linear-gradient(to right, rgb(181,44,100), rgb(198, 101, 67) 50%, rgb(181,44,100)); */
+/*   color: #fff; */
+  font-size: 20px;
+}
+
+.submit {
+  background: linear-gradient(to right, rgb(181,44,100), rgb(198, 101, 67) 50%, rgb(181,44,100));
+}
+
+.submit:hover {
+  background: rgb(181,44,100);
+}
+
+.submit:active {
+  background: rgb(198, 101, 67);
+}
+
+.contenedor-logo {
+  height: 10%;
+}
+
+.logo{
+  display: inline-block;
+  width: 400px;
+  height: 215px;
+  margin-left: 270px;
+  margin-top: 15px;
+}
+
+.formulario {
+  margin-top: -200px;
+}
+
+.contenedor-batidos {
+  width: 80%;
+  text-align: center;
+}
+
+.contenedor-ver .titulo-batido {
+  margin-left: 200px;
+}
+
+.contenedor-ver h2 {
+  color: #fff;
+}
+
+.batidos {
+  margin-top: 50px;
+  margin-left: 100px;
+  width: 100%;
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.contenedor-batido {
+  margin: 30px;
+  width: 26.5%;
+  background-color: rgb(72, 62, 130);
+  border-radius: 20px;
+  text-align: center;
+  padding: 20px;
+  font-size: 20px;
+}
+
+h3 {
+  color: #fff;
+}
+
+.titulo {
+  text-decoration: underline;
+  min-height: 66px;
+  max-height: 100px;
+}
+
+.corazon {
+  width: 30px;
+  display: inline;
+  margin: 0 20px;
+}
+
+.numero-corazon {
+  display: inline;
+}
+
+.sabor {
+  color: rgb(22, 212, 22);
+}
