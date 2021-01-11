@@ -10,11 +10,12 @@ import { validarFormularioAction, validacionExito, validacionError } from '../ac
 import { useDispatch, useSelector } from 'react-redux';
 
 
+
 const CrearBatido = ({history}) => {
 
     const [nombre, guardarNombre ] = useState('');
 
-    const [frutas, guardarFrutas ] = useState('');
+    const [frutas, guardarFrutas ] = useState([]);
     const [otrafrutas, guardarotrafrutas] = useState('');
 
     const [liquido, guardarLiquido ] = useState('');
@@ -22,7 +23,6 @@ const CrearBatido = ({history}) => {
     const [proteina, guardarProteina ] = useState('');
     const [sabor, guardarSabor ] = useState('');
 
-    const [click, guardarClick ] = useState(false);
     const [opcion, guardarOpcion] = useState(false);
 
     const [valorFruta, guardarValorFruta] = useState('');
@@ -225,17 +225,73 @@ const CrearBatido = ({history}) => {
 
     }
 
-    const agregarCompo = () => {
-
-
-        guardarClick(true);
-
-    }
-
     const FrutaState = e => {
         //agrego la fruta al state (local)
-        guardarFrutas(e.target.value);
+        guardarFrutas([
+            ...frutas,
+            e.target.value
+        ]);
 
+        
+    }
+
+    const insertarInput = () => {
+        //constantes 
+
+        const div = document.createElement("div");
+        div.setAttribute("class", "form-group");
+
+        const label = document.createElement("label");
+        label.innerHTML = "Elija una fruta"
+
+        div.appendChild(label)
+
+        let select = document.createElement("select");
+        select.setAttribute("class", "form-control");
+
+        //creamos las mil opciones delas frutas
+        let Vacia = document.createElement("option");
+        Vacia.value = '';
+        Vacia.innerHTML = '';
+
+        let option = document.createElement("option");
+        option.value = 'Limon';
+        option.innerHTML = 'Limon';
+
+        let option2 = document.createElement("option");
+        option2.innerHTML = 'Strawberry';
+        option2.value = 'Strawberry';
+
+        let option3 = document.createElement("option");
+        option3.innerHTML = 'Sandia';
+        option3.value = 'Sandia';
+
+        let option4 = document.createElement("option");
+        option4.innerHTML = 'Kiwi';
+        option4.value = 'Kiwi';
+
+        let option5 = document.createElement("option");
+        option5.innerHTML = 'Piña';
+        option5.value = 'Piña';
+
+        let option6 = document.createElement("option");
+        option6.innerHTML = 'Banana';
+        option6.value = 'Banana';
+
+        let option7 = document.createElement("option");
+        option7.innerHTML = 'Naranja';
+        option7.value = 'Naranja';
+
+        select.append(Vacia,option, option2,option3,option4,option5,option6,option7);
+        select.addEventListener("change", FrutaState);
+        div.appendChild(select)
+        
+        let form = document.getElementById("CreateForm");
+
+        let idliquido = document.getElementById("id-liquido");
+
+        form.insertBefore(div,idliquido);
+        
         
     }
 
@@ -246,7 +302,8 @@ const CrearBatido = ({history}) => {
 
         <Header />
         <div className="contenedor">
-            {/* <Link to='/' className='btn submit' >Volver</Link> */}
+            {/* <Link to='/' className='btn submit' >Volver</Link> RAMA ESPERIMENTP */}
+        
             <div className="borde">
                 <br/>
                 <br/>
@@ -255,13 +312,13 @@ const CrearBatido = ({history}) => {
                 <div className="formulario">
                     <form onSubmit={enviarDatos} id="CreateForm">
         
-                        <div className="form-group">
+                        <div className="form-group" id="div">
                             <label>Escriba el nombre del batido</label>
                             <input type="text" autoComplete="off" className="form-control" placeholder="Nombre de batido" name="nombre" onChange={e => guardarNombre(e.target.value)} value={nombre} />
                         </div>
 
-                        <div className="form-group ">
-                            <label>Seleccione Una Fruta</label>
+                        <div className="form-group">
+                            <label id="label">Seleccione Una Fruta</label>
                             <select name="nombrefruta" className="form-control" onChange={FrutaState} >
                                 <option value=""></option>
                                 <option value="Limon">limon</option>
@@ -273,17 +330,12 @@ const CrearBatido = ({history}) => {
                                 <option value="Naranja">Naranja</option>
 
                             </select>
-
-                            
-                            <br/>
-
-                            
+                            <br/>              
                         </div>
 
-                        {(click)? <FrutasOptions frutas={frutas} guardarFrutas={guardarotrafrutas} guardarOpcion={guardarOpcion} /> : null }
 
 
-                        <div className="form-group">
+                        <div className="form-group" id="id-liquido">
                             <label>Seleccione el liquido</label>
                             <select name="liquido" className="form-control" onChange={ (e) => guardarLiquido(e.target.value)} >
                                 <option value=""></option>
@@ -315,12 +367,10 @@ const CrearBatido = ({history}) => {
                         <button type="submit" className="btn btn-block submit" form="CreateForm" >Crear</button>
                     </form>
 
-                    {(!click)? 
                     <div className="contenedor-derecha">
-                        <button name="boton" onClick={agregarCompo} className="btn btn-block submit derecha">Agregar otra fruta</button>
+                        <button name="boton" onClick={insertarInput} className="btn btn-block submit derecha">Agregar otra fruta</button>
                     </div>
-                    : null
-                    }
+
                 </div>
             </div>
         </div>
