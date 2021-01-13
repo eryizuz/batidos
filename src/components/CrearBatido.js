@@ -1,39 +1,26 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import FrutasOptions from './FrutasOptions';
-import Swal from 'sweetalert2';
-
-import Header from './Header';
+import React, { useState, useEffect, Fragment } from "react";
+import Swal from "sweetalert2";
+import Header from "./Header";
 
 //redux
 import { crearNuevoBatidoAction } from '../actions/batidosActions';
 import { validarFormularioAction, validacionExito, validacionError } from '../actions/validacionActions';
 import { useDispatch, useSelector } from 'react-redux';
 
-
-
 const CrearBatido = ({history}) => {
 
+    // state local
+
     const [nombre, guardarNombre ] = useState('');
-
     const [frutas, guardarFrutas ] = useState([]);
-    const [otrafrutas, guardarotrafrutas] = useState('');
-
-    const [liquido, guardarLiquido ] = useState('');
-
+    const [objeto, guardarObjeto] = useState([]);
+    //arreglo de objetos frutas
+    const [liquido, guardarLiquido ] = useState({});
     const [proteina, guardarProteina ] = useState('');
     const [sabor, guardarSabor ] = useState('');
 
-    const [opcion, guardarOpcion] = useState(false);
 
-    const [valorFruta, guardarValorFruta] = useState('');
-    const [valorOtraFruta, guardarOtraValorFruta] = useState('');
-
-    const [valorLiquido, guardarValorLiquido ] = useState('');
-
-    const [valorTotal, guardarValorTotal] = useState(0);
-
-    //crear nuevo producto
-
+    // redux
     const dispatch = useDispatch();
     const agregarBatido = (batido) => dispatch( crearNuevoBatidoAction(batido) );
     const validarFormulario = () => dispatch( validarFormularioAction() );
@@ -43,97 +30,6 @@ const CrearBatido = ({history}) => {
     //seleccionamos el state de redux
     const error = useSelector(state => state.error.error);
 
-    useEffect( () => {
-
-        if(!frutas){
-            return;
-        } else {
-            //aqui tenemos que darle valor a la fruta deacuerdo a la table de valores de la prueba
-            /* let valoresFrutas = {
-                Sandia: 6,
-                Strawberry: 5,
-                Piña: 8,
-                Narajanja: 10,
-                Kiwi: 7,
-                Banana: 9,
-                Limon: 4,
-
-            } */
-            //valores de la primera fruta
-
-            if(frutas === 'Limon'){
-                guardarValorFruta(4)
-            }else if(frutas === 'Sandia') {
-                guardarValorFruta(6)
-            }else if(frutas === 'Strawberry') {
-                guardarValorFruta(5)
-            }else if(frutas === 'Piña') {
-                guardarValorFruta(8)
-            }else if(frutas === 'Narajanja') {
-                guardarValorFruta(10)
-            }else if(frutas === 'Kiwi') {
-                guardarValorFruta(7)
-            }else if(frutas === 'Banana') {
-                guardarValorFruta(9)
-            }
-
-            //valores de la segunda
-
-            if(otrafrutas === 'Limon'){
-                guardarOtraValorFruta(4)
-            }else if(otrafrutas === 'Sandia') {
-                guardarOtraValorFruta(6)
-            }else if(otrafrutas === 'Strawberry') {
-                guardarOtraValorFruta(5)
-            }else if(otrafrutas === 'Piña') {
-                guardarOtraValorFruta(8)
-            }else if(otrafrutas === 'Naranja') {
-                guardarOtraValorFruta(10)
-            }else if(otrafrutas === 'Kiwi') {
-                guardarOtraValorFruta(7)
-            }else if(otrafrutas === 'Banana') {
-                guardarOtraValorFruta(9)
-            }
-        }
-
-        if(liquido){
-            /* let valoresFrutas = {
-                Leche: 4,
-                Agua: 0,
-                Aguadecoco: 2,
-                Lechedesoya: 3,
-                lechedealmendra: 1
-
-            } */
-            if(liquido === 'Leche'){
-                guardarValorLiquido(4)
-            }else if(liquido === 'Agua') {
-                guardarValorLiquido(0)
-            }else if(liquido === 'Agua de coco') {
-                guardarValorLiquido(2)
-            }else if(liquido === 'Leche de soya') {
-                guardarValorLiquido(3)
-            }else if(liquido === 'Lecha de almendra') {
-                guardarValorLiquido(1)
-            }
-        }
-        const sumaTotal = () => {
-            if(!valorOtraFruta) {
-                const valorSumado = parseInt(valorFruta + valorLiquido, 10);
-                guardarValorTotal(valorSumado);
-
-
-            }else {
-                const valorSumado = parseInt(valorFruta+ valorOtraFruta + valorLiquido, 10);
-                guardarValorTotal(valorSumado);
-                console.log(valorTotal);
-            }
-        }
-        sumaTotal();
-        /* const valorSumado = parseInt(valorFruta + valorLiquido, 10);
-        guardarValorTotal(valorSumado); */
-
-    },[frutas,otrafrutas, liquido, valorFruta, valorOtraFruta, valorLiquido, valorTotal])
 
     const enviarDatos = e => {
 
@@ -166,64 +62,29 @@ const CrearBatido = ({history}) => {
           )
           history.push('/batidos');
 
-        // hacemos un objeto para mandarlo a la db 
+          let salubridad = 0;
+          objeto.forEach(e => {
+              salubridad += e.valorFruta;
+          })
 
-        //aki valido si el cliente le agrega otra fruta a la vaina njd 
+          salubridad += liquido.valorLiquido;
+          
 
-        if(!opcion) {
+          const objetoDB = {
+            nombre,
+            frutas: objeto,
+            liquido: liquido.nombreLiquido,
+            proteina,
+            sabor: parseInt(sabor),
+            salubridad
 
-            
-            let batidoObjetoModelo = {
-                nombre,
-                frutas: [
-                    {
-                        nombreFruta: frutas,
-                        valorFruta
-                    }
-                ],
-                liquido: {
-                    nombreLiquido: liquido,
-                    valorLiquido: valorLiquido
-                },
-                proteina,
-                sabor,
-                valorTotal
-            }
-            
-            //console.log(batidoObjetoModelo);
-            agregarBatido(batidoObjetoModelo);
-        } else {
+          }
 
-            let batidoObjetoModelo = {
-                nombre,
-                frutas: [
-                    {
-                        nombreFruta: frutas,
-                        valorFruta
-                    },
-                    {
-                        nombreFruta: otrafrutas,
-                        valorFruta: valorOtraFruta
-                    }
-                ],
-                liquido: {
-                    nombreLiquido: liquido,
-                    valorLiquido: valorLiquido
-                },
-                proteina,
-                sabor,
-                valorTotal
-            }
-            /* const valorSumado = parseInt(batidoObjetoModelo.frutas[0].valorFruta + batidoObjetoModelo.frutas[1].valorFruta + valorLiquido, 10);
-            guardarValorTotal(valorSumado); */
-            //console.log(valorTotal);
+          //console.log(objetoDB);
+          agregarBatido(objetoDB);
 
-            //console.log(batidoObjetoModelo);
-            agregarBatido(batidoObjetoModelo);
-            
         }
 
-    }
 
     const FrutaState = e => {
         //agrego la fruta al state (local)
@@ -231,12 +92,57 @@ const CrearBatido = ({history}) => {
             ...frutas,
             e.target.value
         ]);
+     
+        const { value } = e.target;
 
-        
+        /* const valuecortado = value.substring(value.length -1);
+        guardarValorFruta(parseInt(valuecortado)); */
+
+        const arregloFruta = value.split(' ',2);
+        const nombreF = arregloFruta[0];
+
+        const valorFruta = parseInt(arregloFruta[1]);
+
+        guardarObjeto([
+          ...objeto,
+            {
+              nombreFruta: nombreF,
+              valorFruta
+            }
+        ]);
+
+        let select = e.target;
+
+        select.disabled = true;
+      
+    }
+
+    const leerLiquido = e => {
+
+      const { value } = e.target;
+
+      const valueCortadoNumero = parseInt(value.substring(value.length -1));
+
+      const valueCortadoNombre = value.substring(0,value.length -2);
+
+      guardarLiquido({
+        nombreLiquido: valueCortadoNombre,
+        valorLiquido: valueCortadoNumero
+      })     
+
     }
 
     const insertarInput = () => {
         //constantes 
+
+        const eliminarSelect = () => {
+
+          let newobject = [...objeto];
+          newobject.splice(objeto.length,1);
+          guardarObjeto(newobject);
+            div.remove();
+
+        }
 
         const div = document.createElement("div");
         div.setAttribute("class", "form-group");
@@ -255,37 +161,44 @@ const CrearBatido = ({history}) => {
         Vacia.innerHTML = '';
 
         let option = document.createElement("option");
-        option.value = 'Limon';
+        option.value = 'Limon 4';
         option.innerHTML = 'Limon';
 
         let option2 = document.createElement("option");
         option2.innerHTML = 'Strawberry';
-        option2.value = 'Strawberry';
+        option2.value = 'Strawberry 5';
 
         let option3 = document.createElement("option");
         option3.innerHTML = 'Sandia';
-        option3.value = 'Sandia';
+        option3.value = 'Sandia 6';
 
         let option4 = document.createElement("option");
         option4.innerHTML = 'Kiwi';
-        option4.value = 'Kiwi';
+        option4.value = 'Kiwi 7';
 
         let option5 = document.createElement("option");
         option5.innerHTML = 'Piña';
-        option5.value = 'Piña';
+        option5.value = 'Piña 8';
 
         let option6 = document.createElement("option");
         option6.innerHTML = 'Banana';
-        option6.value = 'Banana';
+        option6.value = 'Banana 9';
 
         let option7 = document.createElement("option");
         option7.innerHTML = 'Naranja';
-        option7.value = 'Naranja';
+        option7.value = 'Naranja 10';
 
         select.append(Vacia,option, option2,option3,option4,option5,option6,option7);
         select.addEventListener("change", FrutaState);
-        div.appendChild(select)
-        
+
+        const botonBorrar = document.createElement('button');
+        botonBorrar.innerHTML = 'Eliminar Fruta';
+        botonBorrar.setAttribute("type", "button");
+        botonBorrar.setAttribute("class", "btn submit derecha");
+        botonBorrar.addEventListener("click", eliminarSelect);
+
+        div.appendChild(select);
+        div.appendChild(botonBorrar);
         let form = document.getElementById("CreateForm");
 
         let idliquido = document.getElementById("id-liquido");
@@ -295,88 +208,118 @@ const CrearBatido = ({history}) => {
         
     }
 
+  return (
+    <Fragment>
+      <Header />
 
-    return ( 
+      <div className="contenedor">
+        <div className="borde">
+          <br />
+          <br />
+          <br />
+          <br />
+          <div className="formulario">
+            <form onSubmit={enviarDatos} id="CreateForm">
+              <div className="form-group" id="div">
+                <label>Escriba el nombre del batido</label>
+                <input
+                  type="text"
+                  autoComplete="off"
+                  className="form-control"
+                  placeholder="Nombre de batido"
+                  name="nombre"
+                  onChange={(e) => guardarNombre(e.target.value)}
+                  value={nombre}
+                />
+              </div>
 
-        <Fragment>
+              <div className="form-group">
+                <label id="label">Seleccione Una Fruta</label>
+                <select
+                  name="nombrefruta"
+                  className="form-control"
+                  onChange={FrutaState}
+                >
+                  <option value=""></option>
+                  <option value="Limon 4">limon</option>
+                  <option value="Strawberry 5">Strawberry</option>
+                  <option value="Sandia 6">Sandia</option>
+                  <option value="Kiwi 7">kiwi</option>
+                  <option value="Piña 8">piña</option>
+                  <option value="Banana 9">Banana</option>
+                  <option value="Naranja 10">Naranja</option>
+                </select>
+                <br />
+              </div>
 
-        <Header />
-        <div className="contenedor">
-            {/* <Link to='/' className='btn submit' >Volver</Link> RAMA ESPERIMENTP */}
-        
-            <div className="borde">
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <div className="formulario">
-                    <form onSubmit={enviarDatos} id="CreateForm">
-        
-                        <div className="form-group" id="div">
-                            <label>Escriba el nombre del batido</label>
-                            <input type="text" autoComplete="off" className="form-control" placeholder="Nombre de batido" name="nombre" onChange={e => guardarNombre(e.target.value)} value={nombre} />
-                        </div>
+              <button
+                name="boton"
+                type="button"
+                onClick={insertarInput}
+                id="id-liquido"
+                className="btn submit derecha"
+              >
+                Agregar otra fruta
+              </button>
+              <div className="form-group">
+                <label>Seleccione el liquido</label>
+                <select
+                  name="liquido"
+                  className="form-control"
+                  onChange={leerLiquido}
+                >
+                  <option value=""></option>
+                  <option value="Agua 0">Agua</option>
+                  <option value="Lecha de almendra 1">Leche de Almendra</option>
+                  <option value="Agua de coco 2">Agua de coco</option>
+                  <option value="Leche de soya 3">Leche de soya</option>
+                  <option value="Leche 4">Leche</option>
+                </select>
+              </div>
 
-                        <div className="form-group">
-                            <label id="label">Seleccione Una Fruta</label>
-                            <select name="nombrefruta" className="form-control" onChange={FrutaState} >
-                                <option value=""></option>
-                                <option value="Limon">limon</option>
-                                <option value="Strawberry">Strawberry</option>
-                                <option value="Sandia">Sandia</option>
-                                <option value="Kiwi">kiwi</option>
-                                <option value="Piña">piña</option>
-                                <option value="Banana">Banana</option>
-                                <option value="Naranja">Naranja</option>
+              <div className="form-group">
+                <label>Seleccione la proteina</label>
+                <select
+                  name="proteina"
+                  className="form-control"
+                  onChange={(e) => guardarProteina(e.target.value)}
+                >
+                  <option value=""></option>
+                  <option value="Sin sabor">Sin sabor</option>
+                  <option value="Vainilla">Vainilla</option>
+                  <option value="Chocolate">Chocolate</option>
+                  <option value="Coco">Coco</option>
+                  <option value="Caramelo">Caramelo</option>
+                </select>
+              </div>
 
-                            </select>
-                            <br/>              
-                        </div>
+              <div className="form-group">
+                <label>puntue del 1 al 100</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={sabor}
+                  onChange={(e) => guardarSabor(e.target.value)}
+                />
+              </div>
 
+              <button
+                type="submit"
+                className="btn btn-block submit"
+                form="CreateForm"
+              >
+                Crear
+              </button>
+            </form>
 
-
-                        <div className="form-group" id="id-liquido">
-                            <label>Seleccione el liquido</label>
-                            <select name="liquido" className="form-control" onChange={ (e) => guardarLiquido(e.target.value)} >
-                                <option value=""></option>
-                                <option value="Agua">Agua</option>
-                                <option value="Lecha de almendra">Leche de Almendra</option>
-                                <option value="Agua de coco">Agua de coco</option>
-                                <option value="Leche de soya">Leche de soya</option>
-                                <option value="Leche">Leche</option>
-                            </select>
-                        </div>
-
-                        <div className="form-group">
-                            <label>Seleccione la proteina</label>
-                            <select name="proteina" className="form-control" onChange={ (e) => guardarProteina(e.target.value)} >
-                                <option value=""></option>
-                                <option value="Sin sabor">Sin sabor</option>
-                                <option value="Vainilla">Vainilla</option>
-                                <option value="Chocolate">Chocolate</option>
-                                <option value="Coco">Coco</option>
-                                <option value="Caramelo">Caramelo</option>
-                            </select>
-                        </div>
-
-                        <div className="form-group">
-                            <label>puntue del 1 al 100</label>
-                            <input type="number" className="form-control" value={sabor} onChange={ (e) => guardarSabor(e.target.value)} />
-                        </div>
-
-                        <button type="submit" className="btn btn-block submit" form="CreateForm" >Crear</button>
-                    </form>
-
-                    <div className="contenedor-derecha">
-                        <button name="boton" onClick={insertarInput} className="btn btn-block submit derecha">Agregar otra fruta</button>
-                    </div>
-
-                </div>
-            </div>
+            {/* <div className="contenedor-derecha">
+                        <button name="boton" type="button" onClick={insertarInput} className="btn btn-block submit derecha">Agregar otra fruta</button>
+                    </div> */}
+          </div>
         </div>
+      </div>
     </Fragment>
-     );
-    
-}
- 
+  );
+};
+
 export default CrearBatido;
